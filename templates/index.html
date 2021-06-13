@@ -3,7 +3,9 @@
 <head>
 
 <style>
-    highcharts-figure, .highcharts-data-table table {
+
+    .highcharts-figure, 
+    .highcharts-data-table table {
     min-width: 320px; 
     max-width: 660px;
     margin: 1em auto;
@@ -61,10 +63,37 @@
     </p>
 </figure>
 
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"
+integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
 
 
 <script>
-    / *Build the chart*/
+  
+  $(document).ready(function () {
+            // console.log( "ready!" );
+
+            get_data();
+        });
+
+        function get_data() {
+
+            url = "/api/data"
+
+            // var myusername = 'testing';
+            $.ajax({
+                type: "GET",
+                url: url,
+                success: function (data) {
+                    // $("#resultarea").text(data);
+                    console.log(data);
+
+                    plot_chart(data);
+                }
+            });
+        } //- get data
+
+
+function plot_chart(result_data) {
 Highcharts.chart('container', {
     chart: {
         plotBackgroundColor: null,
@@ -93,47 +122,21 @@ Highcharts.chart('container', {
             showInLegend: true
         }
     },
-    series: [{
-        name: 'Tree Species',
-        colorByPoint: true,
-        data: [{
-            name: 'Black spruce',
-            y: 37,
-/*             sliced: true,
-            selected: true */
-        }, {
-            name: 'White spruce',
-            y: 2
-        }, {
-            name: 'Balsam fir',
-            y: 4
-        }, {
-            name: 'Conifers',
-            y: 6
-        }, {
-            name: 'Poplar',
-            y: 21
-        }, {
-            name: 'white berch',
-            y: 7
-        },{
-            name: 'Hard Maple',
-            y: 4
-        },{
-            name: 'Hardwoods',
-            y: 4
-        },{
-            name: 'White pine',
-            y: 3
-        },{
-            name: 'Jack pine',
-            y: 12
-        }]
-    }]
-});
+    series: [
+        {
+                name: "Percentage in Ontario",
+                data: result_data['data_list']
+            }
+        ]
+
+
+    });
+}
+
 
 
 </script>
 
 </body>
+
 </html>
